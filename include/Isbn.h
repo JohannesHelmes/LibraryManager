@@ -4,20 +4,14 @@ public:
     Isbn();
     ~virtual isbn();
 
-    bool check() const;
-    uint8_t calcChecksum() const;
     void pushDigit( uint8_t digit );
+    void reset( std::string number );
     int64_t getNumber() const;
 
-protected:
+    bool check() const;
+    uint8_t calcChecksum() const;
+private:
     std::vector<uint8_t> number_;
-
+    char typ_; // 'U' - unknown, 'X' - Isbn10, 'E' - EAN ( Isbn13 )
 };
 
-class Isbn10 : public Isbn
-{
-};
-
-class Isbn13 : public Isbn
-{
-};
