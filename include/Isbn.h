@@ -12,6 +12,6 @@ public:
     uint8_t calcChecksum() const;
 private:
     std::vector<uint8_t> number_;
-    char typ_; // 'U' - unknown, 'X' - Isbn10, 'E' - EAN ( Isbn13 )
+    char typ_; // 'U' - unknown, 'X' - Isbn10, 'E' - EAN ( Isbn13 ), 'W' - wrong
 };
 
