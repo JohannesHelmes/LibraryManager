@@ -4,14 +4,18 @@ public:
     Isbn();
     ~virtual isbn();
 
-    void pushDigit( uint8_t digit );
-    void reset( std::string number );
-    int64_t getNumber() const;
+    void pushDigit( char digit );
+    void update( std::string number );
+    std::string getNumber() const;
 
-    bool check() const;
-    uint8_t calcChecksum() const;
+    void updateTyp();
+    bool checkValid() const;
+    int8_t calcChecksum() const;
+
+    std::list< std::string > autoComplete() const;
 private:
-    std::vector<uint8_t> number_;
+    std::vector<uint8_t> num_;
     char typ_; // 'U' - unknown, 'X' - Isbn10, 'E' - EAN ( Isbn13 ), 'W' - wrong
+    static int32_t _maxAutoComplete = 100;
 };
 
