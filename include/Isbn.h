@@ -1,21 +1,28 @@
+#include<string>
+#include<list>
+#include<set>
+#include<vector>
+
 class Isbn
 {
 public:
     Isbn();
-    ~virtual isbn();
+    virtual ~Isbn();
 
     void pushDigit( char digit );
-    void update( std::string number );
+    void update( std::string numStr );
     std::string getNumber() const;
 
-    void updateTyp();
     bool checkValid() const;
-    int8_t calcChecksum() const;
-
     std::list< std::string > autoComplete() const;
 private:
-    std::vector<uint8_t> num_;
+    void updateTyp();
+    int8_t calcChecksum() const;
+
+
+    std::vector<int8_t> num_;
     char typ_; // 'U' - unknown, 'X' - Isbn10, 'E' - EAN ( Isbn13 ), 'W' - wrong
-    static int32_t _maxAutoComplete = 100;
+    static const int32_t _maxAutoComplete = 100;
+    const std::set<char> _allowedDigits {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'X' };
 };
 

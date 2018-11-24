@@ -2,22 +2,27 @@
 
 Isbn::Isbn()
 {
-    number_.clear();
+    num_.clear();
     typ_ = 'U';
 }
 
 void Isbn::pushDigit( char digit )
 {
-    num_.push_back( uint8_t(digit - '0') );
+    num_.push_back( int8_t(digit - '0') );
     updateTyp();
 }
 
 void Isbn::update( std::string numStr )
 {
+    num_.assign( numStr.size(), -1 );
     const char* numChar = numStr.c_str(); 
     int32_t newSize = numStr.size();
     for ( int i = 0; i <= newSize; ++i )
-        num_[i] = (uint8_t)(numChar[i] - '0' );
+    {
+        if ( _allowedDigits.count( numChar[i] ) == 0 )
+            continue;
+        num_[i] = numChar[i] == 'X' ? 10 : (int8_t)(numChar[i] - '0' );
+    }
     updateTyp();
 }
 
@@ -27,28 +32,28 @@ std::string Isbn::getNumber() const
     if ( typ_ == 'W' )
         return "";
     std::string numStr = "";
-    for ( auto itrDig = number_.rbegin(), itrDig != number_.rend(); ++itrDig )
-        numStr.push_back( *itrDig == 10 ? 'X' : char(uint8_t('0') + *itrDig ));
+    for ( auto itrDig = num_.rbegin(); itrDig != num_.rend(); ++itrDig )
+        numStr.push_back( *itrDig == 10 ? 'X' : char(int8_t('0') + *itrDig ));
     return numStr;
 }
 
 void Isbn::updateTyp()
 {
     typ_ = 'U';
-    if ( newSize >= 3 )
+    if ( num_.size() >= 3 )
     {
         if ( num_[0] == 9 && num_[1] == 7 && ( num_[2] == 8 || num_[2] == 9 ) )
-            typ_ = ( newSize <= 13 ) ? 'E' : 'W' ;
+            typ_ = ( num_.size()<= 13 ) ? 'E' : 'W' ;
         else
-            typ_ = ( newSize <= 10 ) ? 'X' : 'W' ;
+            typ_ = ( num_.size()<= 10 ) ? 'X' : 'W' ;
     }
 }
 
 bool Isbn::checkValid() const
 {
-    else if ( typ_ == 'X' && num_.size() == 10 )
+    if ( typ_ == 'X' && num_.size() == 10 )
         return calcChecksum() == num_[9];
-    else if ( typ_ == 'E' && num_.size() == 13 )
+    if ( typ_ == 'E' && num_.size() == 13 )
         return calcChecksum() == num_[12];
     return false;
 }
@@ -73,6 +78,6 @@ int8_t Isbn::calcChecksum() const
     return -1; // error code
 }
 
-std::list< std::string > autoComplete() const
+std::list< std::string > Isbn::autoComplete() const
 {
 }
