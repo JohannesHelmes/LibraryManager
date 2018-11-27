@@ -24,7 +24,6 @@ void Isbn::update( std::string numStr )
         if ( _allowedDigits.count( numChar[i] ) == 0 )
             continue;
         num_[i] = numChar[i] == 'X' ? 10 : (int8_t)(numChar[i] - '0' );
-        std::cout << i << " t " <<  num_[i] << " o " << std::int8_t(numChar[i] - '0') << std::endl;
     }
     updateTyp();
 }
@@ -67,14 +66,20 @@ int8_t Isbn::calcChecksum() const
     {
         int8_t sum = 0;
         for ( int i = 0; i <= 8; ++i )
-            sum += ( num_[i] * ( i + 1 ) ) % 11;
+        {
+            sum += num_[i] * ( i + 1 );
+            sum %= 11;
+        }
         return sum;
     }
     if ( typ_ == 'E' && num_.size() >= 12 )
     {
         int8_t sum = 0;
         for ( int i = 0; i <= 11; i+=2 )
-            sum += ( num_[i] + 3 * num_[i+1] ) % 10;
+        {
+            sum += ( num_[i] + 3 * num_[i+1] );
+            sum %= 10;
+        }
         sum = ( 10 - sum ) % 10 ;
         return sum;
     }
