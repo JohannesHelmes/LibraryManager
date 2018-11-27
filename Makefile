@@ -12,9 +12,16 @@ LDLIBS += -lm
 CLASSES = Isbn
 OBJ_ALL = $(addprefix $(BIN_DIR)/,$(addsuffix .o,$(CLASSES)))
 
+TEST = $(TEST_DIR)/testLibraryManager
+TEST_SRC = testIsbn mainTest
+TEST_OBJ= $(addprefix $(TEST_DIR)/,$(addsuffix .o,$(TEST_SRC)))
+
 all : $(OBJ_ALL)
 
-test : $(TEST_DIR)/mainTest
+test : $(TEST)
+
+$(TEST) : $(TEST_OBJ) $(OBJ_ALL)
+	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(BIN_DIR)/%.o : $(SRC_DIR)/%.cpp
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
@@ -22,9 +29,7 @@ $(BIN_DIR)/%.o : $(SRC_DIR)/%.cpp
 $(TEST_DIR)/%.o : $(TEST_DIR)/%.cpp
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-$(TEST_DIR)/mainTest : $(TEST_DIR)/mainTest.o
-	$(CXX) $(LDFLAGS) $(LDLIBS) -o $@
 
 clean:
-	rm $(BIN_DIR)/Isbn.o
+	$(RM) $(BIN_DIR)/Isbn.o $(TEST_DIR)/mainTest
 

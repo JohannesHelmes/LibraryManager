@@ -1,3 +1,4 @@
+#include<cinttypes>
 #include<string>
 #include<list>
 #include<set>
@@ -7,11 +8,12 @@ class Isbn
 {
 public:
     Isbn();
-    virtual ~Isbn();
+    virtual ~Isbn() {};
 
     void pushDigit( char digit );
     void update( std::string numStr );
     std::string getNumber() const;
+    char getTyp() const { return typ_; };
 
     bool checkValid() const;
     std::list< std::string > autoComplete() const;

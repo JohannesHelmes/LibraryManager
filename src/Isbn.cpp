@@ -1,5 +1,7 @@
 #include "Isbn.h"
 
+#include<iostream>
+
 Isbn::Isbn()
 {
     num_.clear();
@@ -17,11 +19,12 @@ void Isbn::update( std::string numStr )
     num_.assign( numStr.size(), -1 );
     const char* numChar = numStr.c_str(); 
     int32_t newSize = numStr.size();
-    for ( int i = 0; i <= newSize; ++i )
+    for ( int i = 0; i < newSize; ++i )
     {
         if ( _allowedDigits.count( numChar[i] ) == 0 )
             continue;
         num_[i] = numChar[i] == 'X' ? 10 : (int8_t)(numChar[i] - '0' );
+        std::cout << i << " t " <<  num_[i] << " o " << std::int8_t(numChar[i] - '0') << std::endl;
     }
     updateTyp();
 }
@@ -64,7 +67,7 @@ int8_t Isbn::calcChecksum() const
     {
         int8_t sum = 0;
         for ( int i = 0; i <= 8; ++i )
-            sum += num_[i] * ( i + 1 ) % 11;
+            sum += ( num_[i] * ( i + 1 ) ) % 11;
         return sum;
     }
     if ( typ_ == 'E' && num_.size() >= 12 )
