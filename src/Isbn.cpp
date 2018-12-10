@@ -13,6 +13,7 @@ void Isbn::pushDigit( char digit )
 {
     num_.push_back( int8_t(digit - '0') );
     updateTyp();
+    autoCompCount_ = 0;
 }
 
 void Isbn::update( std::string numStr )
@@ -27,6 +28,7 @@ void Isbn::update( std::string numStr )
         num_[i] = numChar[i] == 'X' ? 10 : (int8_t)(numChar[i] - '0' );
     }
     updateTyp();
+    autoCompCount_ = 0;
 }
 
 
@@ -61,7 +63,7 @@ bool Isbn::checkValid() const
 std::string Isbn::num2strg( std::vector<int8_t> const& number ) const
 {
     std::string numStr = "";
-    for ( auto itrDig = number.rbegin(); itrDig != number.rend(); ++itrDig )
+    for ( auto itrDig = number.cbegin(); itrDig != number.cend(); ++itrDig )
         numStr.push_back( *itrDig == 10 ? 'X' : char(int8_t('0') + *itrDig ));
     return numStr;
 }
@@ -100,29 +102,24 @@ std::list< std::string > Isbn::autoComplete( int32_t size )
         autoCompList.push_back( num2strg( num_ ) );
         return autoCompList;
     }
+    else if ( typ_ == 'W' || typ_ == 'U' )
+        return autoCompList;
 
     size = std::min( size, _maxAutoComp );
-    std::vector<int8_t> autoComp( num_ );
+    if ( autoCompCount_ == 0 )
+        autoComp_ = num_;
     int32_t cnt = 0;
     int8_t crtDgt = num_.size();
-    if ( typ_ == 'X' )
+    int8_t const chkSumDgt = ( typ_ == 'X' ? 9 : 12 );
+    autoComp_.resize( chkSumDgt + 1, 0 );
+    while ( cnt < size && crtDgt < chkSumDgt )
     {
-        autoComp.resize( 9, 0 );
-        while ( cnt < size && crtDgt < 9 )
-        {
-            autoComp[ 9 ] = calcChecksum( autoComp );
-            autoCompList.push_back( num2strg( autoComp ) );
-            ++autoComp[ crtDgt ];
-            while ( autoComp[ crtDgt ] == 10 )
-            {
-                autoComp[ crtDgt ] = 0;
-                ++autoComp[ ++crtDgt ];
-            }
-            ++cnt;
-        }
-    }
-    else if ( typ_ == 'E' )
-    {
+        autoComp_[ chkSumDgt ] = calcChecksum( autoComp_ );
+        autoCompList.push_back( num2strg( autoComp_ ) );
+        crtDgt = num_.size();
+        while ( crtDgt < chkSumDgt && ++autoComp_[ crtDgt ] == 10 )
+            autoComp_[ crtDgt++ ] = 0;
+        ++cnt;
     }
 
     autoCompCount_ += autoCompList.size();

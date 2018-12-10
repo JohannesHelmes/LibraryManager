@@ -3,14 +3,23 @@
 
 TEST_CASE( "Testing class Isbn", "[Isbn]" )
 {
-    Isbn isbnVal10, isbnWrong10, isbnVal13, isbnWrong13, isbnIncomplete13;
+    Isbn isbnVal10, isbnWrong10, isbnVal13, isbnWrong13, isbnIncomplete10;
     isbnVal10.update ( "3426111233" );
     isbnVal13.update ( "9783411040155" );
     std::string isbnQueneau = "2070253104";
 
-    REQUIRE( isbnVal10.getTyp() == 'X' );
-    REQUIRE( isbnVal10.checkValid() );
+    CHECK( isbnVal10.getTyp() == 'X' );
+    CHECK( isbnVal10.checkValid() );
+    CHECK( isbnVal10.getNumber() == "3426111233" );
 
-    REQUIRE( isbnVal13.getTyp() == 'E' );
-    REQUIRE( isbnVal13.checkValid() );
+    CHECK( isbnVal13.getTyp() == 'E' );
+    CHECK( isbnVal13.checkValid() );
+
+    isbnIncomplete10.update( "3765485" );
+    CHECK( isbnIncomplete10.getTyp() == 'X' );
+    std::string autoComp = "";
+    auto list = isbnIncomplete10.autoComplete( 20 );
+    for ( auto listItr = list.cbegin(); listItr != list.cend(); ++listItr )
+        autoComp +=  *listItr + "\n";
+    WARN( autoComp );
 }

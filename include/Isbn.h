@@ -23,7 +23,7 @@ private:
     std::string num2strg( std::vector<int8_t> const& number ) const;
 
 
-    std::vector<int8_t> num_;
+    std::vector<int8_t> num_, autoComp_;
     char typ_; // 'U' - unknown, 'X' - Isbn10, 'E' - EAN ( Isbn13 ), 'W' - wrong
     int32_t autoCompCount_;
     static const int32_t _maxAutoComp = 100;
