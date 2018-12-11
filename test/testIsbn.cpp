@@ -18,7 +18,8 @@ TEST_CASE( "Testing class Isbn", "[Isbn]" )
     isbnIncomplete10.update( "3765485" );
     CHECK( isbnIncomplete10.getTyp() == 'X' );
     std::string autoComp = "";
-    auto list = isbnIncomplete10.autoComplete( 20 );
+    auto list = isbnIncomplete10.autoComplete( 10 );
+    list = isbnIncomplete10.autoComplete( 8 );
     for ( auto listItr = list.cbegin(); listItr != list.cend(); ++listItr )
         autoComp +=  *listItr + "\n";
     WARN( autoComp );
