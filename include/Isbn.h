@@ -1,3 +1,5 @@
+#pragma once
+
 #include<cinttypes>
 #include<string>
 #include<list>

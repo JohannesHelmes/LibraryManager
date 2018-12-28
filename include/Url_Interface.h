@@ -1,3 +1,5 @@
+#pragma once 
+
 #include "BookDataset.h"
 #include "Isbn.h"
 
@@ -7,7 +9,7 @@ public:
     Url_Interface() {};
     virtual ~Url_Interface() {};
 
-    virtual void processRequest() = 0;
+    void processRequest();
     virtual void genRequest( std::string anyfields ) = 0; 
     virtual void genRequest( BookDataset bds ); 
     virtual void genRequestIsbn( std::string isbn ); 
@@ -21,15 +23,18 @@ protected:
 class Dnb_Interface : public Url_Interface
 {
 public:
-    Dnb_Interface() : Url_Interface {};
-    ~Dnb_Interface();
+    Dnb_Interface();
+    virtual ~Dnb_Interface() {};
 
-    void processRequest( );
     void genRequest( std::string anyfields ); 
     void genRequest( BookDataset bds ); 
     void genRequestIsbn( std::string isbn ); 
 
+    void setToken( std::string token ) { token_ = token; }
+
+    std::string const& getResponseText() const { return response_; };
 private:
     void parseRdfXml();
+    std::string token_, rootUrl_, response_;
 
 };

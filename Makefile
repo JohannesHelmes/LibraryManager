@@ -9,7 +9,7 @@ CFLAGS += -O2
 LDFLAGS += -Llib
 LDLIBS += -lm
 
-CLASSES = Isbn
+CLASSES = Isbn Url_Interface
 OBJ_ALL = $(addprefix $(BIN_DIR)/,$(addsuffix .o,$(CLASSES)))
 
 TEST = $(TEST_DIR)/testLibraryManager
@@ -31,5 +31,5 @@ $(TEST_DIR)/%.o : $(TEST_DIR)/%.cpp
 
 
 clean:
-	$(RM) $(BIN_DIR)/Isbn.o $(TEST_DIR)/mainTest
+	$(RM) $(OBJ_ALL) $(TEST_DIR)/mainTest
 
