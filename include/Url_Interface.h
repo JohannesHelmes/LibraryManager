@@ -3,20 +3,26 @@
 #include "BookDataset.h"
 #include "Isbn.h"
 
+typedef std::list<BookDataset> ResultList ;
+
 class Url_Interface
 {
 public:
     Url_Interface() {};
     virtual ~Url_Interface() {};
 
-    void processRequest();
-    virtual void genRequest( std::string anyfields ) = 0; 
-    virtual void genRequest( BookDataset bds ); 
-    virtual void genRequestIsbn( std::string isbn ); 
-    std::list<BookDataset> getData() const {return data_;};
+    virtual ResultList search( std::string anyfields ) = 0; 
+    virtual ResultList search( BookDataset bds ); 
+    virtual ResultList searchIsbns( std::string isbn ); 
 
 protected:
     std::list<BookDataset> data_;
+    std::pair< std::string, std::string > searchParams_;
+
+private:
+    void generateRequest();
+    void processRequest();
+    
     std::string request_;
 };
 
@@ -26,11 +32,11 @@ public:
     Dnb_Interface();
     virtual ~Dnb_Interface() {};
 
-    void genRequest( std::string anyfields ); 
-    void genRequest( BookDataset bds ); 
-    void genRequestIsbn( std::string isbn ); 
+    ResultList search( std::string anyfields );
+    ResultList search( BookDataset bds ); 
+    ResultList searchIsbns( std::string isbn ); 
 
-    void setToken( std::string token ) { token_ = token; }
+    void setToken( std::string token );
 
     std::string const& getResponseText() const { return response_; };
 private:
