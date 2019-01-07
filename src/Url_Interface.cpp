@@ -21,13 +21,13 @@ void Url_Interface::processRequest()
 Dnb_Interface::Dnb_Interface() : Url_Interface()
 {
     rootUrl_ = "https://services.dnb.de/sru/dnb?";
-    searchParams_.push_back( make_pair( "version", "1.1" ) );
-    searchParams_.push_back( make_pair( "operation", "searchRetrieve" ) );
+    cql_.pushConstPar( "version", "1.1" );
+    cql_.pushConstPar( "operation", "searchRetrieve" );
 }
 
 void Dnb_Interface::setToken( string token )
 {
-    searchParams_.push_back( make_pair( "accessToken", token ) );
+    cql_.pushConstPar( "accessToken", token );
 }
 
 
@@ -42,7 +42,9 @@ ResultList Dnb_Interface::search( BookDataset bds )
 
 ResultList Dnb_Interface::searchIsbns( std::string isbn )
 {
-    request_ = rootUrl_ + "&query=isbn" + urlCode( "=" ) + isbn + "&accessToken=" + token_;
+    cql_.clearVolatilePars();
+    cql_.pushVolatilePar( "query", "isbn=" + isbn );
+    request_ = rootUrl_ + cql_.request();
     std::cout << request_ <<std::endl;
 }
 

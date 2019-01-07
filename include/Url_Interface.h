@@ -2,6 +2,7 @@
 
 #include "BookDataset.h"
 #include "Isbn.h"
+#include "Cql_query.h"
 
 typedef std::list<BookDataset> ResultList ;
 
@@ -37,10 +38,12 @@ public:
     ResultList searchIsbns( std::string isbn ); 
 
     void setToken( std::string token );
+    void setDefaultParams();
 
     std::string const& getResponseText() const { return response_; };
 private:
     void parseRdfXml();
     std::string token_, rootUrl_, response_;
+    Cql_query cql_;
 
 };
