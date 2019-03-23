@@ -9,18 +9,20 @@ CFLAGS += -O2
 LDFLAGS += -Llib
 LDLIBS += -lm
 
-CLASSES = Isbn Url_Interface
-OBJ_ALL = $(addprefix $(BIN_DIR)/,$(addsuffix .o,$(CLASSES)))
 
-TEST = $(TEST_DIR)/testLibraryManager
-TEST_SRC = testIsbn mainTest
-TEST_OBJ= $(addprefix $(TEST_DIR)/,$(addsuffix .o,$(TEST_SRC)))
+SRC_APP = $(wildcard $(SRC_DIR)/*.cpp)
+OBJ_APP = $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%.o,$(SRC_APP))
 
-all : $(OBJ_ALL)
+TEST = $(TEST_DIR)/TestLibraryManager
+SRC_TEST = $(wildcard $(TEST_DIR)/*.cpp)
+OBJ_TEST = $(patsubst $(TEST_DIR)/%.cpp,$(TEST_DIR)/%.o,$(SRC_TEST))
+
+
+all : $(OBJ_APP)
 
 test : $(TEST)
 
-$(TEST) : $(TEST_OBJ) $(OBJ_ALL)
+$(TEST) : $(OBJ_TEST) $(OBJ_APP)
 	$(CXX) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 $(BIN_DIR)/%.o : $(SRC_DIR)/%.cpp
@@ -31,5 +33,5 @@ $(TEST_DIR)/%.o : $(TEST_DIR)/%.cpp
 
 
 clean:
-	$(RM) $(OBJ_ALL) $(TEST_DIR)/mainTest
+	$(RM) $(OBJ_TEST) $(OBJ_APP) $(TEST)
 

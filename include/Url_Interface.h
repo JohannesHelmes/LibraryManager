@@ -20,11 +20,11 @@ protected:
     std::list<BookDataset> data_;
     std::pair< std::string, std::string > searchParams_;
 
+    std::string request_;
 private:
     void generateRequest();
     void processRequest();
     
-    std::string request_;
 };
 
 class Dnb_Interface : public Url_Interface
